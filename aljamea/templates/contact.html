@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% block title %}Contact & Visit · {{ inst.name }}{% endblock %}
+{% block desc %}Addresses, telephone numbers, email and maps for Aljamea-tus-Saifiyah in Surat, Karachi, Nairobi and Mumbai.{% endblock %}
+{% block main %}
+{{ m.page_hero('Contact & visit', 'اتصل بنا', 'Four campuses, three countries', 'Write, call or visit. Every campus office is listed below with directions.') }}
+<section class="sec" style="padding-top:0"><div class="wrap ct-grid">
+  {% for c in campuses %}
+  <div class="ct" data-reveal style="--d:{{ (loop.index0 % 2) * 0.08 }}s">
+    <iframe title="Map of the {{ c.name }} campus" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q={{ (inst.name ~ ' ' ~ c.address|join(' '))|urlencode }}&z=15&output=embed"></iframe>
+    <div class="b">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h3">{{ c.name }}</h2><span class="ar" style="font-size:26px;color:var(--accent-text)">{{ c.ar }}</span></div>
+      <div class="row"><svg><use href="#pin"/></svg><span>{{ c.address|join(', ') }}</span></div>
+      <div class="row"><svg><use href="#phone"/></svg><a href="tel:{{ c.phone|replace(' ', '') }}">{{ c.phone }}</a></div>
+      <div class="row"><svg><use href="#mail"/></svg><a href="mailto:{{ c.email }}">{{ c.email }}</a></div>
+      <a class="link" style="justify-self:start;margin-top:6px" href="{{ url_for('site.campus', slug=c.slug) }}">About this campus <svg><use href="#arrow"/></svg></a>
+    </div>
+  </div>
+  {% endfor %}
+</div></section>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% block title %}News & Events · {{ inst.name }}{% endblock %}
+{% block desc %}News and events from Aljamea-tus-Saifiyah’s campuses in Surat, Karachi, Nairobi and Mumbai.{% endblock %}
+{% block main %}
+{{ m.page_hero('News & events', 'الأخبار', 'From our four campuses', 'Visits, achievements, milestones and reflections from across Aljamea.') }}
+<section class="sec" style="padding-top:0"><div class="wrap">
+  <div class="sibs" style="margin-bottom:40px">
+    <a class="chip {{ 'on' if not campus }}" href="{{ url_for('site.news') }}">All</a>
+    {% for c in campus_names %}<a class="chip {{ 'on' if campus == c }}" href="{{ url_for('site.news', campus=c) }}">{{ c }}</a>{% endfor %}
+  </div>
+  <div class="news-grid">{% for n in items %}{{ m.news_card(n) }}{% else %}<p class="muted">No news for this campus yet.</p>{% endfor %}</div>
+</div></section>
+{% endblock %}

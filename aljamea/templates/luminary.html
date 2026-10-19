@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = l.img %}
+{% block title %}{{ l.name }} {{ l.hon }} · {{ inst.name }}{% endblock %}
+{% block desc %}{{ l.lead|truncate(155) }}{% endblock %}
+{% block main %}
+<section class="p-hero">
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('site.home') }}">Home</a><svg><use href="#chev"/></svg><a href="{{ url_for('site.luminaries') }}">Luminaries</a><svg><use href="#chev"/></svg><span aria-current="page">{{ l.name }}</span></nav>
+      <span class="kick" data-reveal>{{ l.title }} · {{ l.rank }}</span>
+      <h1 class="h1" style="margin-top:20px" data-split>{{ l.name }}<span class="hon">{{ l.hon }}</span></h1>
+      <p class="caps muted" style="margin-top:16px" data-reveal>{{ l.dates }}</p>
+      <p class="lead" data-reveal style="--d:.2s">{{ l.lead|hon }}</p>
+      <p class="h3" style="margin-top:30px;color:var(--accent-text);--d:.3s" data-reveal><em>{{ l.theme }}</em></p>
+    </div>
+    <div class="arch-frame" data-reveal="curtain"><div class="arch">{{ m.pic(l.img, l.name, '(max-width: 860px) 60vw, 30vw', True) }}</div></div>
+  </div>
+</section>
+<section class="sec" style="padding-top:clamp(30px,4vw,60px)"><div class="narrow">{{ m.sections(l.sections, stages) }}</div></section>
+<section class="sec-sm bg-paper"><div class="wrap">
+  <div class="pn" style="border:0;padding:0">
+    <a href="{{ url_for('site.luminary', slug=prev.slug) if prev else url_for('site.luminaries') }}"><span class="caps muted">← Previous</span><span>{{ prev.name if prev else 'All luminaries' }}</span></a>
+    <a href="{{ url_for('site.luminary', slug=nxt.slug) if nxt else url_for('site.luminaries') }}"><span class="caps muted">Next →</span><span>{{ nxt.name if nxt else 'All luminaries' }}</span></a>
+  </div>
+</div></section>
+<div style="height:clamp(40px,6vw,80px)"></div>
+{% endblock %}

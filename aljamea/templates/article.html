@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = n.img %}
+{% block title %}{{ n.title }} · {{ inst.name }}{% endblock %}
+{% block desc %}{{ n.dek }}{% endblock %}
+{% block main %}
+<article>
+  <header class="sec-sm" style="padding-bottom:0"><div class="narrow">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('site.home') }}">Home</a><svg><use href="#chev"/></svg><a href="{{ url_for('site.news') }}">News</a><svg><use href="#chev"/></svg><span aria-current="page">{{ n.title|truncate(40, True, "…") }}</span></nav>
+    <div class="n-card" style="gap:0"><div class="meta"><b>{{ n.campus }}</b><span>{{ n.date|nicedate }}</span><span class="ar" style="font-size:16px">{{ n.date|hijri('ar') }}</span></div></div>
+    <h1 class="h1" style="margin:20px 0 22px" data-split>{{ n.title|hon }}</h1>
+    <p class="lead" data-reveal>{{ n.dek|hon }}</p>
+  </div></header>
+  <div class="wrap" style="margin:clamp(36px,5vw,64px) auto"><div data-reveal="curtain" style="border-radius:28px;overflow:hidden;aspect-ratio:16/8;background:var(--sand)">{{ m.pic(n.img, n.title, '100vw', True, 'cover') }}</div></div>
+  <div class="narrow prose drop" style="font-size:19px">{% for para in n.body %}<p data-reveal>{{ para|hon }}</p>{% endfor %}</div>
+</article>
+<section class="sec"><div class="wrap">
+  <div class="head"><div><span class="kick">More news</span></div><a class="link" href="{{ url_for('site.news') }}">All news <svg><use href="#arrow"/></svg></a></div>
+  <div class="news-grid">{% for x in more %}{{ m.news_card(x) }}{% endfor %}</div>
+</div></section>
+{% endblock %}

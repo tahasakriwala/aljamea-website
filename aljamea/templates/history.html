@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = 'al-azhar-university' %}
+{% block title %}A Thousand Years of Learning · {{ inst.name }}{% endblock %}
+{% block desc %}From al-Azhar in 970 to the Mumbai campus in 2023: the history of the Fatimi educational movement embodied in Aljamea-tus-Saifiyah.{% endblock %}
+{% block main %}
+{{ m.page_hero('A thousand years of learning', 'التاريخ', 'History', 'The history of Aljamea is the history of Fatimi education, established at the dawn of Islam. Today it is a physical institute; in spirit it is the educational legacy of the Dawoodi Bohra community.', 'al-azhar-university', [('About', url_for('site.page', slug='about'))]) }}
+
+<section class="sec bg-night pattern">
+  <div class="wrap">
+    <div class="duo">
+      <div data-reveal><span class="kick">The bedrock</span>
+        <h2 class="h1" style="margin:18px 0 24px">“Read.”</h2>
+        <div class="prose"><p>The Holy Quran, in its very first word, asked the Prophet Mohammed <span class="hon">SAW</span>, and through him all humankind, to read and to learn. He made the pursuit of knowledge an obligation upon every Muslim man and woman.</p>
+        <p>Imam Mohammed al-Baqir <span class="hon">AS</span> and Imam Ja‘far al-Sadiq <span class="hon">AS</span> set out the jurisprudence they inherited and trained a generation of jurists. The epistles of Ikhwān al-Safā’, by Imam Ahmad al-Taqi <span class="hon">AS</span>, showed every discipline, seen rightly, to be a path to the oneness of Allah.</p></div></div>
+      <div data-reveal style="--d:.15s">{{ m.journey_svg(jmap) }}</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="head"><div><span class="kick">Timeline of key events</span><h2 class="h1" style="margin-top:18px" data-split>From al-Azhar to <em>Marol.</em></h2></div></div>
+    <div class="era" aria-hidden="true"><span>{{ timeline[0][1] }}</span></div>
+    <div class="tl">
+      <div class="tl-fill" aria-hidden="true"></div>
+      {% for yr, place, text, im in timeline %}
+      {% set ah, ce = yr.split('/') %}
+      <article class="tl-item" data-era="{{ place }} · {{ ce }}">
+        <div class="yr">{{ ce }}<span class="ah">{{ ah|ardigits }} هـ</span></div>
+        <span class="place">{{ place }}</span>
+        <p>{{ text|hon }}</p>
+        {% if im and has_img(im) %}<div class="ph" data-reveal="curtain">{{ m.pic(im, text|striptags, '(max-width: 760px) 90vw, 40vw') }}</div>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sec bg-paper"><div class="wrap">
+  <div class="duo flip">
+    <figure class="duo-media" style="margin:0" data-reveal="curtain"><div class="ph">{{ m.pic('innaugaration-jamea-surat', 'Inauguration of the Surat campus, 1961') }}</div></figure>
+    <div data-reveal><span class="kick">The realisation</span><h2 class="h2">Darse Saifee becomes Aljamea-tus-Saifiyah</h2>
+      <div class="prose"><p>A century after its founding, the academy passed to Syedna Taher Saifuddin <span class="hon">RA</span>, in an age of world wars, independence movements and unheard-of scientific discovery. He reshaped its teaching so graduates could thrive in that world.</p>
+      <p>In 1381/1961 he built the new Surat campus, welcomed English, the sciences and the humanities, and renamed the academy Jāmi‘a, Arabic for university, and Saifiyya, honouring both Syednas who shaped it.</p></div></div>
+  </div>
+</div></section>
+{{ m.cta() }}
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% block hdr_class %}over{% endblock %}
+{% block body_class %}home{% endblock %}
+{% block main %}
+
+{# ============================ 1. THE GATEWAY ============================ #}
+<section class="hero" aria-label="Welcome">
+  <div class="hero-pin">
+    <div class="hive" data-slides='{{ slides|tojson }}' role="img" aria-label="Aljamea’s campuses and departments, seen through a honeycomb"></div>
+    <svg class="hive-lines" aria-hidden="true"></svg>
+    <link rel="preload" as="image" href="{{ img('ajsm-05baabshot2-fw') }}">
+    <div class="hero-copy">
+      <div class="hero-top">
+        <div class="meta">Est. {{ inst.founded_ah }} AH · {{ inst.founded_ce }} CE<br>Surat · Karachi · Nairobi · Mumbai</div>
+        <span class="logo" role="img" aria-label="{{ inst.name }} — {{ inst.ar }}"></span>
+        <div class="meta r">{{ hijri.en }}<br>{{ years_since_founding }} years of Aljamea</div>
+      </div>
+      <div class="hero-bottom">
+        <h1 class="display" data-split>A thousand years of learning, open to the <em>world</em>.</h1>
+        <p>The principal educational institute of the Dawoodi Bohra community: eleven years of Fatimi philosophy, Arabic and the Quran, alongside the best of contemporary learning.</p>
+      </div>
+    </div>
+    <div class="hero-cue" aria-hidden="true">Enter<i></i></div>
+    <div class="hero-caption"><a href="{{ slides[0].url }}" data-cap>{{ slides[0].label }}</a>
+      <div class="hero-dots" role="tablist" aria-label="Scenes">{% for s in slides %}<button aria-label="{{ s.label }}" class="{{ 'on' if loop.first }}"><i></i></button>{% endfor %}</div></div>
+  </div>
+</section>
+
+<div class="frieze" aria-hidden="true"><div class="frieze-track">
+  {% for i in range(2) %}<span>الحكمة</span><svg><use href="#khatam"/></svg><span class="en">Philosophy</span><svg><use href="#khatam"/></svg><span>الأدب</span><svg><use href="#khatam"/></svg><span class="en">Literature</span><svg><use href="#khatam"/></svg><span>الفقه</span><svg><use href="#khatam"/></svg><span class="en">Jurisprudence</span><svg><use href="#khatam"/></svg><span>الأخبار</span><svg><use href="#khatam"/></svg><span class="en">History</span><svg><use href="#khatam"/></svg><span>اللغات</span><svg><use href="#khatam"/></svg><span class="en">Languages</span><svg><use href="#khatam"/></svg><span>العلوم</span><svg><use href="#khatam"/></svg><span class="en">Sciences</span><svg><use href="#khatam"/></svg>{% endfor %}
+</div></div>
+
+{# ============================ 2. STATEMENT ============================ #}
+<section class="sec">
+  <div class="wrap intro-grid">
+    <aside class="intro-side" data-reveal>
+      <div class="arch">{{ m.pic('ajsn-08minaret03-dl-3498', 'A minaret of the Nairobi campus', '160px') }}</div>
+      <span class="kick">About Aljamea</span>
+    </aside>
+    <div>
+      <p class="statement" data-split="scrub">Aljamea-tus-Saifiyah is the realisation of the Fatimi approach to learning in mortar and stone. Ancient yet modern, focused yet holistic: an academy where the Quran, philosophy and the sciences are pursued as one quest for excellence of mind and character.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:44px" data-reveal>
+        <a class="btn" href="{{ url_for('site.page', slug='about') }}">Our story <svg><use href="#arrow"/></svg></a>
+        <a class="btn btn-line" href="{{ url_for('site.history') }}">A thousand-year timeline</a>
+      </div>
+      <div class="stats" style="margin-top:clamp(64px,8vw,110px)">
+        <div class="stat" data-reveal><div class="n"><span data-count="{{ years_since_founding }}">{{ years_since_founding }}</span></div><div class="l">years since Darse Saifee was founded in Surat</div></div>
+        <div class="stat" data-reveal style="--d:.08s"><div class="n"><span data-count="11">11</span></div><div class="l">years of study, from higher secondary to master’s level</div></div>
+        <div class="stat" data-reveal style="--d:.16s"><div class="n"><span data-count="{{ campuses|length }}">{{ campuses|length }}</span></div><div class="l">campuses in India, Pakistan and Kenya</div></div>
+        <div class="stat" data-reveal style="--d:.24s"><div class="n"><span data-count="2.2">2.2</span><sup>M</sup></div><div class="l">meals served each year by the Mawā’id</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ============================ 3. THE JOURNEY OF KNOWLEDGE ============================ #}
+<section class="bg-night" aria-labelledby="jt">
+  <div class="wrap" style="padding-top:clamp(80px,10vw,150px)">
+    <div class="head" style="margin-bottom:0">
+      <div><span class="kick">The journey of knowledge</span>
+        <h2 class="h1" id="jt" style="margin-top:18px" data-split>From Cairo to Mumbai, in <em>a thousand years.</em></h2></div>
+      <p class="lead" style="max-width:420px">The locus of learning moved with the imams and their du‘āt: Egypt, Yemen, India, and back to Africa. Scroll to follow it.</p>
+    </div>
+  </div>
+  <div class="journey" style="--stops:{{ journey|length }}" data-stops='{{ jmap.at|tojson }}'>
+    <div class="journey-pin wrap">
+      <div class="journey-text">
+        {% for s in journey %}
+        <article class="j-card {{ 'on' if loop.first }}">
+          <div class="yr">{{ s.year.split('/')[1] }}<span class="ah">{{ s.year.split('/')[0]|ardigits }} هـ</span></div>
+          <div class="city">{{ s.city }} <span class="ar">{{ s.ar }}</span></div>
+          <p>{{ s.text|hon }}</p>
+        </article>
+        {% endfor %}
+        <div class="j-dots" aria-hidden="true">{% for s in journey %}<i class="{{ 'on' if loop.first }}"></i>{% endfor %}</div>
+      </div>
+      <div>{{ m.journey_svg(jmap) }}</div>
+    </div>
+  </div>
+  <div style="height:clamp(60px,8vw,120px)"></div>
+</section>
+
+{# ============================ 4. CAMPUSES (horizontal) ============================ #}
+<section class="rail-wrap bg-paper" aria-labelledby="ct">
+  <div class="rail-pin">
+    <div class="rail">
+      <div class="rail-intro">
+        <span class="kick">Four campuses</span>
+        <h2 class="h1" id="ct" style="margin:18px 0 22px">Every campus faces the <em>Kaaba.</em></h2>
+        <p class="muted">Each centres on its masjid, and each brings Fatimi monuments from Cairo, Yemen and India to life for a new generation.</p>
+        <a class="link" style="margin-top:20px" href="{{ url_for('site.campuses') }}">All campuses <svg><use href="#arrow"/></svg></a>
+      </div>
+      {% for c in campuses %}
+      <a class="c-card" href="{{ url_for('site.campus', slug=c.slug) }}">
+        <div class="arch">{{ m.pic(c.card, c.name ~ ' campus', '(max-width: 860px) 78vw, 30vw') }}
+          <div class="over"><span class="yr">{{ c.year }}</span><span class="ar">{{ c.ar }}</span></div></div>
+        <h3 class="h3">{{ c.name }} <span class="country">{{ c.country }}</span></h3>
+        <p class="muted small" style="margin:0">{{ c.since }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ============================ 5. THE ELEVEN STEPS ============================ #}
+<section class="sec"><div class="wrap">{{ m.ladder(stages) }}</div></section>
+
+{# ============================ 6. THE ESTUARY ============================ #}
+<section class="sec bg-night pattern">
+  <div class="wrap estuary">
+    <svg viewBox="0 0 520 420" aria-hidden="true">
+      <defs><radialGradient id="poolg"><stop offset="0" stop-color="#CF8A40" stop-opacity=".55"/><stop offset=".6" stop-color="#2C4FB0" stop-opacity=".25"/><stop offset="1" stop-color="#2C4FB0" stop-opacity="0"/></radialGradient></defs>
+      {% set ins = ['M20 20 C 140 40, 200 120, 260 210', 'M500 20 C 380 40, 320 120, 260 210', 'M20 140 C 120 150, 200 180, 260 210', 'M500 140 C 400 150, 320 180, 260 210'] %}
+      {% set outs = ['M260 210 C 200 260, 140 360, 30 400', 'M260 210 C 320 260, 380 360, 490 400', 'M260 210 C 230 280, 200 330, 170 410', 'M260 210 C 290 280, 320 330, 350 410'] %}
+      {% for d in ins + outs %}<path class="stream-bed" d="{{ d }}"/>{% endfor %}
+      {% for d in ins %}<path class="stream" d="{{ d }}"/>{% endfor %}
+      {% for d in outs %}<path class="stream b" d="{{ d }}"/>{% endfor %}
+      <circle class="pool" cx="260" cy="210" r="90"/>
+      <g transform="translate(260 210)" fill="none" stroke="#E3A964" stroke-width="1.2"><path d="M0-30l26 15v30L0 30l-26-15v-30z"/><path d="M0-14l12 7v14L0 14l-12-7V-7z" fill="#E3A964"/></g>
+      <text x="20" y="12" fill="rgba(246,238,223,.5)" font-size="11" letter-spacing="2">STREAMS OF KNOWLEDGE</text>
+      <text x="500" y="12" fill="rgba(246,238,223,.5)" font-size="11" letter-spacing="2" text-anchor="end">RIVERS OF THE ARTS</text>
+    </svg>
+    <div data-reveal>
+      <span class="kick">The estuary</span>
+      <blockquote class="quote-big" style="margin-top:26px">This ideology makes Aljamea an estuary towards which the streams of different knowledge and the rivers of varied arts flow from all directions and mix together. Then the channels flow forth, each according to its measure.</blockquote>
+      <div class="quote-by"><span><b>Syedna Taher Saifuddin <span class="hon">RA</span></b> · laying the foundation of the Surat masjid, 1377 H</span></div>
+      <p class="muted" style="margin-top:28px;max-width:520px">In the Mumbai courtyard, four streams meet in a central pool and part again into four: these words, built in water.</p>
+    </div>
+  </div>
+</section>
+
+{# ============================ 7. FACULTIES ============================ #}
+<section class="sec" id="faculties">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="kick">Six faculties</span><h2 class="h1" style="margin-top:18px" data-split>Every field of knowledge, <em>none despised.</em></h2></div>
+      <a class="link" href="{{ url_for('site.academics') }}">Academics <svg><use href="#arrow"/></svg></a>
+    </div>
+    <div class="flower-wrap">
+      <div class="flower-info" aria-live="polite">
+        <span class="ar" data-fi="ar">القرآن الكريم</span>
+        <h3 class="h2" data-fi="t">The Quran, at the centre</h3>
+        <p class="lead" data-fi="d">As in the Zawāya of the library, the Quran sits at the heart of every discipline: the fountainhead of knowledge in every age. Around it, six faculties. Choose a cell.</p>
+        <a class="link" data-fi="u" href="{{ url_for('site.department', slug='mahad-al-zahra') }}"><span data-fi="l">Mahad al-Zahra</span> <svg><use href="#arrow"/></svg></a>
+      </div>
+      {% set pos = [(16.67, 0), (50, 0), (66.67, 30), (50, 60), (16.67, 60), (0, 30)] %}
+      <div class="flower" data-flower>
+        <a class="hx core" style="left:33.33%;top:30%;--i:0" href="{{ url_for('site.department', slug='mahad-al-zahra') }}"
+           data-ar="القرآن الكريم" data-t="The Quran, at the centre" data-l="Mahad al-Zahra"
+           data-d="As in the Zawāya of the library, the Quran sits at the heart of every discipline: the fountainhead of knowledge in every age. Around it, six faculties. Choose a cell.">
+          <span class="ar">القرآن</span><span class="en">The Quran</span></a>
+        {% for f in faculties %}
+        <a class="hx" style="left:{{ pos[loop.index0][0] }}%;top:{{ pos[loop.index0][1] }}%;--i:{{ loop.index }}" href="{{ url_for('site.faculty', slug=f.slug) }}"
+           data-ar="{{ f.ar }}" data-t="Faculty of {{ f.name }}" data-l="{{ f.native }}" data-d="{{ f.lead|replace('ʿ', '‘')|replace('ʾ', '’') }}">
+          <span class="ar">{{ f.ar }}</span><span class="en">{{ f.short or f.name }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ============================ 8. CAMPUS LIFE ============================ #}
+<section class="sec bg-sand" style="padding-top:clamp(80px,9vw,130px)">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="kick">Campus life</span><h2 class="h1" style="margin-top:18px" data-split>Nourishing body <em>and</em> soul.</h2>
+        <p class="muted">Residences where breakfast is the students’ responsibility, a dining hall rooted in a 17th-century vow, libraries holding thousand-year-old manuscripts.</p></div>
+      <a class="link" href="{{ url_for('site.life') }}">Explore campus life <svg><use href="#arrow"/></svg></a>
+    </div>
+    <div class="mosaic">
+      {% for f in facilities %}
+      <a class="tile" href="{{ url_for('site.facility', slug=f.slug) }}" data-reveal style="--d:{{ loop.index0 * 0.06 }}s">
+        {{ m.pic(f.img, f.name, '(max-width: 860px) 100vw, 50vw') }}
+        <span class="stat"><b>{{ f.stat[0] }}</b>{{ f.stat[1] }}</span>
+        <div class="t"><span class="caps" style="opacity:.75">{{ f.native }}</span><span class="h3">{{ f.name }}</span><span class="ar">{{ f.ar }}</span></div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ============================ 9. BANNER ============================ #}
+<div class="banner" aria-hidden="true">{{ m.pic('ajsm-03mahadshot1-3785', 'The muqarnas dome of Mahad al-Zahra, Mumbai', '100vw') }}<span class="cap">The muqarnas dome of Mahad al-Zahra · Mumbai</span></div>
+
+{# ============================ 10. LUMINARIES ============================ #}
+<section class="sec">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="kick">Luminaries of Aljamea</span><h2 class="h1" style="margin-top:18px" data-split>An unbroken chain of <em>teachers.</em></h2></div>
+      <a class="link" href="{{ url_for('site.luminaries') }}">All luminaries <svg><use href="#arrow"/></svg></a>
+    </div>
+    <div class="lum-list">
+      {% for l in luminaries %}
+      <a class="lum" href="{{ url_for('site.luminary', slug=l.slug) }}" data-img="{{ img(l.img, 'sm') }}" data-reveal>
+        <span class="rank">{{ l.rank }}</span>
+        <span class="nm">{{ l.name }}<span class="hon">{{ l.hon }}</span></span>
+        <span class="theme">{{ l.theme }}</span>
+        <svg><use href="#arrow"/></svg>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="lum-peek" aria-hidden="true"><div class="arch"><img alt=""></div></div>
+</section>
+
+{# ============================ 11. VOICES ============================ #}
+<section class="sec bg-paper pattern">
+  <div class="narrow" data-voices style="position:relative">
+    <span class="kick">In their words</span>
+    <div class="voices" style="margin-top:30px">
+      {% for q, who, role in voices %}
+      <figure class="voice {{ 'on' if loop.first }}" style="margin:0">
+        <blockquote class="quote-big">{{ q }}</blockquote>
+        <figcaption class="quote-by"><span><b>{{ who }}</b> · {{ role }}</span></figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <div class="voice-nav">{% for v in voices %}<button aria-label="Quote {{ loop.index }}"><i></i></button>{% endfor %}</div>
+  </div>
+</section>
+
+{# ============================ 12. NEWS ============================ #}
+<section class="sec">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="kick">News & events</span><h2 class="h1" style="margin-top:18px" data-split>From across our <em>four campuses.</em></h2></div>
+      <a class="link" href="{{ url_for('site.news') }}">All news <svg><use href="#arrow"/></svg></a>
+    </div>
+    <div class="news-grid">{% for n in news %}{{ m.news_card(n) }}{% endfor %}</div>
+  </div>
+</section>
+
+{{ m.cta() }}
+{% endblock %}

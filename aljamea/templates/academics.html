@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = 'ajsm-11boysclassroomshot3-0895-1' %}
+{% block title %}Academics · {{ inst.name }}{% endblock %}
+{% block desc %}Eleven years in four stages, six faculties and five departments: the academic programme of Aljamea-tus-Saifiyah.{% endblock %}
+{% block main %}
+{{ m.page_hero('Ancient yet modern, focused yet holistic', 'الأكاديمية', 'Academics', 'An eleven-year programme spanning higher secondary, undergraduate and graduate study. Arabic, Lisān al-Da‘wa and English are the languages of instruction, and every student studies widely: the sciences, the humanities and modern languages.', 'ajsm-11boysclassroomshot3-0895-1') }}
+<section class="sec bg-paper"><div class="wrap">{{ m.ladder(stages) }}</div></section>
+
+<section class="sec" id="faculties"><div class="wrap">
+  <div class="head"><div><span class="kick">Six faculties</span><h2 class="h1" style="margin-top:18px" data-split>Where the disciplines <em>meet.</em></h2></div></div>
+  <div class="fac-grid">
+    {% for f in faculties %}
+    <a class="fac" href="{{ url_for('site.faculty', slug=f.slug) }}" data-reveal style="--d:{{ (loop.index0 % 3) * 0.08 }}s">
+      <div class="top"><span class="num">{{ '%02d'|format(loop.index) }}</span><span class="ar">{{ f.ar }}</span></div>
+      <div><h3 class="h3">{{ f.name }}</h3><p style="margin-top:12px">{{ f.lead|hon }}</p></div>
+      <div class="go"><span class="caps" style="color:var(--fg-3)">{{ f.native }}</span><svg><use href="#arrow"/></svg></div>
+    </a>
+    {% endfor %}
+  </div>
+</div></section>
+
+<section class="sec bg-sand"><div class="wrap">
+  <div class="head"><div><span class="kick">Departments & centres</span><h2 class="h1" style="margin-top:18px" data-split>Beyond the <em>lecture hall.</em></h2></div></div>
+  <div class="cards">
+    {% for d in departments %}
+    <a class="card" href="{{ url_for('site.department', slug=d.slug) }}" data-reveal style="--d:{{ (loop.index0 % 3) * 0.08 }}s">
+      <span class="ar">{{ d.ar }}</span><h3 class="h3">{{ d.name }}</h3><p>{{ d.lead|truncate(150)|hon }}</p><span class="link" style="justify-self:start">{{ d.en }} <svg><use href="#arrow"/></svg></span>
+    </a>
+    {% endfor %}
+    <a class="card" href="{{ url_for('site.page', slug='philosophy') }}" data-reveal><span class="ar">الفلسفة</span><h3 class="h3">The Fatimi Philosophy of Education</h3><p>Any knowledge that deepens understanding of the Almighty and His creation is Fatimi in nature.</p><span class="link" style="justify-self:start">Philosophy <svg><use href="#arrow"/></svg></span></a>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="duo">
+    <figure class="duo-media" style="margin:0" data-reveal="curtain"><div class="ph">{{ m.pic('rectangle-13985-7', 'The annual examinations') }}</div><span class="tag">Al-Imtihān al-Sanawī</span></figure>
+    <div data-reveal><span class="kick">Assessment</span><h2 class="h2">Examined before thousands</h2>
+      <div class="prose"><p>His Holiness personally conducts the annual examinations, in the presence of thousands of community members. Students from years seven to eleven are examined orally on the epistles of the du‘āt, and asked to connect them to the modern world.</p></div>
+      <table class="tbl" style="margin:26px 0"><thead><tr><th>Percentage</th><th>Grade</th></tr></thead><tbody>{% for a, b in grades[:4] %}<tr><td>{{ b }}</td><td>{{ a }}</td></tr>{% endfor %}</tbody></table>
+      <a class="link" href="{{ url_for('site.page', slug='examinations') }}">About the examinations <svg><use href="#arrow"/></svg></a></div>
+  </div>
+</div></section>
+{{ m.cta() }}
+{% endblock %}

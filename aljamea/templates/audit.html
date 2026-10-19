@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% block title %}Website Review & Proposal · {{ inst.name }}{% endblock %}
+{% block desc %}A review of the current jameasaifiyah.edu and how this redesign addresses each finding.{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block main %}
+{{ m.page_hero('Website review & proposal', 'المراجعة', 'For the rectors and directors', 'We read every page of jameasaifiyah.edu (the homepage and 36 inner pages) on 19 October 2026. Below is everything we found, with evidence, and how this new site answers each point.') }}
+<section class="sec-sm" style="padding-top:0"><div class="wrap">
+  <div class="score">
+    {% for k in ['critical','high','medium','low'] %}<div data-reveal style="--d:{{ loop.index0 * 0.06 }}s"><span class="sev {{ k }}">{{ k }}</span><b>{{ counts[k] }}</b><span class="muted small">findings</span></div>{% endfor %}
+  </div>
+  <h2 class="h2" style="margin:clamp(56px,7vw,96px) 0 26px" data-reveal>Before & after</h2>
+  <div class="compare" data-reveal>
+    {% for label, was, now in metrics %}<div><span class="caps muted">{{ label }}</span><div class="n" style="margin:14px 0 6px">{{ now }}</div><span class="was">{{ was }}</span></div>{% endfor %}
+  </div>
+</div></section>
+<section class="sec"><div class="wrap layout">
+  <nav class="toc" aria-label="Sections"><span class="caps">Areas</span>{% for area, items in audit %}<a href="#a{{ loop.index }}">{{ area }} <span class="muted">({{ items|length }})</span></a>{% endfor %}</nav>
+  <div class="blocks">
+    {% for area, items in audit %}
+    <section id="a{{ loop.index }}">
+      <h2 class="h2" style="margin-bottom:28px" data-reveal>{{ area }}</h2>
+      {% for sev, title, ev, fix in items %}
+      <div class="issue" data-reveal>
+        <div><span class="sev {{ sev }}">{{ sev }}</span><h3>{{ title }}</h3><p>{{ ev|hon }}</p></div>
+        <div class="fix"><span class="caps">In the new site</span><p style="margin-top:12px">{{ fix|hon }}</p></div>
+      </div>
+      {% endfor %}
+    </section>
+    {% endfor %}
+  </div>
+</div></section>
+{% endblock %}

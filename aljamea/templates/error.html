@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Page not found · {{ inst.name }}{% endblock %}
+{% block main %}
+<section class="err pattern"><div class="narrow">
+  <span class="ar" style="font-size:80px;color:var(--accent-text)">٤٠٤</span>
+  <h1 class="h1" style="margin:10px 0 20px">This page has moved.</h1>
+  <p class="lead">The page you were looking for isn’t here. Try search, or start from the home page.</p>
+  <div style="display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap"><a class="btn" href="{{ url_for('site.home') }}">Home <svg><use href="#arrow"/></svg></a><button class="btn btn-line" data-search>Search</button></div>
+</div></section>
+{% endblock %}

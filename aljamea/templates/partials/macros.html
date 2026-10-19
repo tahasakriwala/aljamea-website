@@ -1,0 +1,172 @@
+{# ------------------------------------------------------------------ responsive photograph #}
+{% macro pic(key, alt=none, sizes='(max-width: 860px) 100vw, 50vw', eager=False, cls='') -%}
+<img class="{{ cls }}" src="{{ img(key, 'sm') }}" srcset="{{ srcset(key) }}" sizes="{{ sizes }}" alt="{{ alt if alt is not none else key|replace('-', ' ') }}"
+     {% if eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+{%- endmacro %}
+
+{# ------------------------------------------------------------------ inner page hero #}
+{% macro page_hero(title, ar='', kicker='', lead='', image=None, crumbs=[]) -%}
+<section class="p-hero">
+  {% if ar %}<span class="ghost ar" aria-hidden="true">{{ ar }}</span>{% endif %}
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('site.home') }}">Home</a>
+        {% for t, u in crumbs %}<svg><use href="#chev"/></svg><a href="{{ u }}">{{ t }}</a>{% endfor %}<svg><use href="#chev"/></svg><span aria-current="page">{{ title|striptags|truncate(40, True, '…') }}</span></nav>
+      {% if kicker %}<span class="kick" data-reveal>{{ kicker|hon }}</span>{% endif %}
+      {% if ar %}<span class="ar ar-title" data-reveal style="--d:.1s">{{ ar }}</span>{% endif %}
+      <h1 class="h1" data-split>{{ title|hon }}</h1>
+      {% if lead %}<p class="lead" data-reveal style="--d:.25s">{{ lead|hon }}</p>{% endif %}
+    </div>
+    {% if image and has_img(image) %}
+    <div class="arch-frame" data-reveal="curtain" style="--d:.15s"><div class="arch">{{ pic(image, title, '(max-width: 860px) 60vw, 30vw', True) }}</div></div>
+    {% endif %}
+  </div>
+</section>
+{%- endmacro %}
+
+{# ------------------------------------------------------------------ the eleven-year ladder #}
+{% macro ladder(stages, heading=True) -%}
+{% set colors = {'1': '#CF8A40', '2a': '#9F672F', '2b': '#2C4FB0', '3': '#1C388C'} %}
+<div class="ladder" data-ladder>
+  <div>
+    {% if heading %}<span class="kick">Eleven years, four stages</span>
+    <h2 class="h2" style="margin:18px 0 0" data-split>Eleven steps, <em>rising</em> in knowledge.</h2>
+    <p class="muted" style="margin:18px 0 0;max-width:520px">The step garden in the Mumbai courtyard has eleven levels, one for each year a student may spend at Aljamea. Choose a stage.</p>{% endif %}
+    <div class="stage-tabs" role="tablist" aria-label="Stages">
+      {% for s in stages %}<button role="tab" data-stage="{{ s.n }}" aria-selected="{{ 'true' if loop.first else 'false' }}" style="--c:{{ colors[s.n] }}" aria-controls="stage-{{ s.n }}">Stage {{ s.n }} · Years {{ s.years[0] }}–{{ s.years[1] }}</button>{% endfor %}
+    </div>
+    {% for s in stages %}
+    <div class="stage-panel {{ 'on' if loop.first }}" id="stage-{{ s.n }}" data-stage="{{ s.n }}" role="tabpanel">
+      <h3 class="h3">{{ s.name }} <span class="muted" style="font-size:.7em">· {{ s.en }}</span></h3>
+      <div class="deg"><span class="caps muted">Degree</span><b>{{ s.degree }}</b><span class="muted">({{ s.degree_en }})</span><span class="ar">{{ s.ar }}</span></div>
+      <ul>{% for pt in s.points %}<li><span>{{ pt|hon }}</span></li>{% endfor %}</ul>
+      <div class="cmp"><b>Comparable to:</b> {{ s.comparable }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  <div data-steps>
+    <div class="steps" aria-hidden="true">
+      {% for y in range(1, 12) %}
+        {% for s in stages %}{% if s.years[0] <= y <= s.years[1] %}
+        <div class="step {{ 'on' if s.n == '1' }}" data-stage="{{ s.n }}" style="--h:{{ 22 + y * 7 }};--i:{{ y }};--c:{{ colors[s.n] }}"><span>{{ y }}</span></div>
+        {% endif %}{% endfor %}
+      {% endfor %}
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:14px" class="caps muted"><span>Year 1</span><span>Year 11</span></div>
+  </div>
+</div>
+{%- endmacro %}
+
+{# ------------------------------------------------------------------ journey map SVG #}
+{% macro journey_svg(jmap, cls='map') -%}
+<svg class="{{ cls }}" viewBox="-10 0 640 420" role="img" aria-label="Map of the journey of learning from Cairo to Yemen, India, Karachi, Nairobi and Mumbai">
+  <defs><radialGradient id="glow"><stop offset="0" stop-color="#CF8A40" stop-opacity=".35"/><stop offset="1" stop-color="#CF8A40" stop-opacity="0"/></radialGradient></defs>
+  {% for i in range(0, 13) %}<line class="grid-l" x1="{{ i * 50 }}" y1="0" x2="{{ i * 50 }}" y2="420"/>{% endfor %}
+  {% for i in range(0, 9) %}<line class="grid-l" x1="-10" y1="{{ i * 50 + 10 }}" x2="630" y2="{{ i * 50 + 10 }}"/>{% endfor %}
+  <text x="300" y="300" fill="rgba(246,238,223,.16)" font-family="DM Serif Display" font-style="italic" font-size="22">Arabian Sea</text>
+  <text x="230" y="400" fill="rgba(246,238,223,.12)" font-family="DM Serif Display" font-style="italic" font-size="22">Indian Ocean</text>
+  <text x="100" y="140" fill="rgba(246,238,223,.12)" font-family="DM Serif Display" font-style="italic" font-size="18" transform="rotate(52 100 140)">Red Sea</text>
+  <path class="route-ghost" d="{{ jmap.d }}"/>
+  <path class="route" d="{{ jmap.d }}"/>
+  {% for p in jmap.pts %}
+  <g class="pt" data-k="{{ p.k }}">
+    <circle cx="{{ p.x }}" cy="{{ p.y }}" r="26" fill="url(#glow)"/>
+    <circle class="h" cx="{{ p.x }}" cy="{{ p.y }}" r="6"/>
+    <circle class="c" cx="{{ p.x }}" cy="{{ p.y }}" r="6"/>
+    <text x="{{ p.lx }}" y="{{ p.ly }}" text-anchor="{{ p.anchor }}">{{ p.city }}</text>
+  </g>
+  {% endfor %}
+</svg>
+{%- endmacro %}
+
+{# ------------------------------------------------------------------ typed content sections #}
+{% macro sections(list, stages=[]) -%}
+<div class="blocks">
+{% for s in list %}
+  {% set sid = 's' ~ loop.index %}
+  {% if s.kind == 'text' %}
+  <section id="{{ sid }}" data-reveal>
+    {% if s.kicker %}<span class="kick">{{ s.kicker }}</span>{% endif %}
+    {% if s.title %}<h2 class="h2" style="margin:18px 0 26px">{{ s.title|hon }}</h2>{% endif %}
+    <div class="prose {{ 'drop' if loop.first and not s.title }}" style="font-size:18.5px">{% for para in s.body %}<p>{{ para|hon }}</p>{% endfor %}</div>
+  </section>
+  {% elif s.kind == 'split' %}
+  <section id="{{ sid }}" class="duo {{ 'flip' if s.flip }}">
+    <figure class="duo-media" style="margin:0" data-reveal="curtain">
+      <div class="ph">{{ pic(s.img, s.title) }}</div>
+      {% if s.kicker %}<span class="tag">{{ s.kicker }}</span>{% endif %}
+      {% if s.caption %}<figcaption>{{ s.caption }}</figcaption>{% endif %}
+    </figure>
+    <div data-reveal style="--d:.15s">
+      {% if s.kicker %}<span class="kick">{{ s.kicker }}</span>{% endif %}
+      <h2 class="h2">{{ s.title|hon }}</h2>
+      <div class="prose">{% for para in s.body %}<p>{{ para|hon }}</p>{% endfor %}</div>
+    </div>
+  </section>
+  {% elif s.kind == 'quote' %}
+  <section id="{{ sid }}" class="pull pattern" data-reveal>
+    <blockquote class="quote-big" style="position:relative">{{ s.text|hon }}</blockquote>
+    <div class="quote-by" style="position:relative"><span><b>{{ s.by|hon }}</b>{% if s.note %} · {{ s.note }}{% endif %}</span></div>
+  </section>
+  {% elif s.kind == 'facts' %}
+  <section id="{{ sid }}">
+    {% if s.title %}<h2 class="h2" style="margin-bottom:34px" data-reveal>{{ s.title }}</h2>{% endif %}
+    <div class="facts">{% for t, b in s['items'] %}
+      <div class="fact" data-reveal style="--d:{{ (loop.index0 % 2) * 0.1 }}s"><span class="ix">{{ '%02d'|format(loop.index) }}</span><h3>{{ t|hon }}</h3><p>{{ b|hon }}</p></div>{% endfor %}</div>
+  </section>
+  {% elif s.kind == 'table' %}
+  <section id="{{ sid }}" data-reveal>
+    <h2 class="h2" style="margin-bottom:14px">{{ s.title }}</h2>
+    {% if s.lead %}<p class="muted" style="max-width:620px;margin:0 0 30px">{{ s.lead }}</p>{% else %}<div style="height:22px"></div>{% endif %}
+    <div style="overflow-x:auto"><table class="tbl"><thead><tr>{% for h in s.head %}<th>{{ h }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for r in s.rows %}<tr>{% for cell in r %}<td>{{ cell|hon }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+  </section>
+  {% elif s.kind == 'list' %}
+  <section id="{{ sid }}" data-reveal>
+    <h2 class="h3" style="margin-bottom:22px">{{ s.title }}</h2>
+    <div class="list-pills">{% for it in s['items'] %}<span>{{ it }}</span>{% endfor %}</div>
+  </section>
+  {% elif s.kind == 'stats' %}
+  <section id="{{ sid }}" class="stats" data-reveal>
+    {% for n, suf, label in s['items'] %}<div class="stat"><div class="n"><span data-count="{{ n }}">{{ n }}</span><sup>{{ suf }}</sup></div><div class="l">{{ label }}</div></div>{% endfor %}
+  </section>
+  {% elif s.kind == 'gallery' %}
+  <section id="{{ sid }}">
+    {% if s.title %}<h2 class="h3" style="margin-bottom:24px" data-reveal>{{ s.title }}</h2>{% endif %}
+    <div class="gal" data-gal>{% for k in s.imgs if has_img(k) %}<button data-full="{{ img(k) }}" aria-label="Open photo" data-reveal style="--d:{{ (loop.index0 % 3) * 0.08 }}s">{{ pic(k, (s.title or 'Aljamea') ~ ', photograph ' ~ loop.index, '(max-width: 600px) 50vw, 33vw') }}</button>{% endfor %}</div>
+  </section>
+  {% elif s.kind == 'stages' %}
+  <section id="{{ sid }}">{{ ladder(stages) }}</section>
+  {% endif %}
+{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro toc(list) -%}
+<nav class="toc" aria-label="On this page"><span class="caps">On this page</span>
+  {% for s in list %}{% set label = s.title or s.kicker or ({'stats': 'In numbers', 'stages': 'The eleven years', 'quote': 'In their words', 'gallery': 'Gallery'}[s.kind] if s.kind in ('stats','stages','quote','gallery') else ('Overview' if loop.first else '')) %}
+  {% if label %}<a href="#s{{ loop.index }}">{{ label|striptags|truncate(34, True, '…') }}</a>{% endif %}{% endfor %}
+</nav>
+{%- endmacro %}
+
+{% macro news_card(n, sizes='(max-width: 600px) 100vw, 33vw') -%}
+<a class="n-card" href="{{ url_for('site.article', slug=n.slug) }}" data-reveal>
+  <div class="ph">{{ pic(n.img, n.title, sizes) }}</div>
+  <div class="meta"><b>{{ n.campus }}</b><span>{{ n.date|nicedate }}</span></div>
+  <h3>{{ n.title|hon }}</h3>
+  <p>{{ n.dek|hon }}</p>
+</a>
+{%- endmacro %}
+
+{% macro cta(title='Begin the journey', body='Aljamea welcomes young men and women of the Dawoodi Bohra community into an eleven-year education of the mind and the soul.', image='ajsm-06sahatshot4-2713with-students') -%}
+<section class="sec-sm"><div class="wrap">
+  <div class="cta" data-reveal>
+    {{ pic(image, '', '100vw') }}
+    <div><span class="kick" style="color:var(--copper-2)">Admissions</span>
+      <h2 class="h1" style="margin:18px 0 18px" data-split>{{ title }}</h2>
+      <p style="max-width:520px;color:rgba(255,246,232,.82);margin:0">{{ body }}</p></div>
+    <div class="acts"><a class="btn btn-copper" href="{{ url_for('site.admissions') }}">Admissions <svg><use href="#arrow"/></svg></a>
+      <a class="btn btn-line" href="{{ url_for('site.contact') }}">Visit a campus</a></div>
+  </div>
+</div></section>
+{%- endmacro %}

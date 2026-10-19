@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = 'ajsn-18maskan02-3694' %}
+{% block title %}Campus Life · {{ inst.name }}{% endblock %}
+{% block desc %}Residences, sports, the Mawā’id dining hall, libraries, computer labs and auditoriums across Aljamea-tus-Saifiyah’s four campuses.{% endblock %}
+{% block main %}
+{{ m.page_hero('Nourishing body and soul', 'الحياة', 'Campus life', 'World-class sports and recreation on all four campuses, excursions to heritage sites and nature retreats, and vocational options from graphic design and music to programming and photography.', 'ajsn-18maskan15-bonfire-2304') }}
+<section class="sec" style="padding-top:0"><div class="wrap">
+  <div class="mosaic">
+    {% for f in facilities %}
+    <a class="tile" href="{{ url_for('site.facility', slug=f.slug) }}" data-reveal style="--d:{{ loop.index0 * 0.06 }}s">
+      {{ m.pic(f.img, f.name, '(max-width: 860px) 100vw, 50vw') }}
+      <span class="stat"><b>{{ f.stat[0] }}</b>{{ f.stat[1] }}</span>
+      <div class="t"><span class="caps" style="opacity:.75">{{ f.native }}</span><span class="h3">{{ f.name }}</span><span class="ar">{{ f.ar }}</span></div>
+    </a>
+    {% endfor %}
+  </div>
+</div></section>
+<section class="sec bg-night pattern"><div class="narrow" style="text-align:center">
+  <span class="kick">The thāl</span>
+  <p class="statement" style="margin-top:26px" data-split="scrub">Eight or nine students share one platter. Seniors serve juniors. Around a circle, there is no head of the table.</p>
+  <div class="stats" style="margin-top:56px;text-align:left;border-color:rgba(246,238,223,.12)">
+    <div class="stat"><div class="n"><span data-count="3000">3,000</span></div><div class="l">people served every day</div></div>
+    <div class="stat"><div class="n"><span data-count="2.2">2.2</span><sup>M</sup></div><div class="l">meals each year</div></div>
+    <div class="stat"><div class="n"><span data-count="550">550</span></div><div class="l">seats in the Mumbai Mawā’id</div></div>
+    <div class="stat"><div class="n"><span data-count="9">9</span></div><div class="l">students around each thāl</div></div>
+  </div>
+</div></section>
+{{ m.cta() }}
+{% endblock %}

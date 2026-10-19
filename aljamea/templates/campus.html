@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = cp.img %}
+{% block hdr_class %}over{% endblock %}
+{% block title %}{{ cp.name }} Campus · {{ inst.name }}{% endblock %}
+{% block desc %}{{ cp.lead|truncate(155) }}{% endblock %}
+{% block main %}
+<section class="c-hero">
+  {{ m.pic(cp.img, inst.name ~ ', ' ~ cp.name, '100vw', True) }}
+  <div class="wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ url_for('site.home') }}">Home</a><svg><use href="#chev"/></svg><a href="{{ url_for('site.campuses') }}">Campuses</a><svg><use href="#chev"/></svg><span aria-current="page">{{ cp.name }}</span></nav>
+      <span class="ar" data-reveal>{{ cp.ar }}</span>
+      <h1 class="display" data-split>{{ cp.name }}</h1>
+    </div>
+    <p class="lead" style="color:rgba(255,246,232,.86);margin:0;--d:.2s" data-reveal>{{ cp.lead|hon }}</p>
+  </div>
+</section>
+<section class="sec-sm"><div class="wrap">
+  <dl class="c-meta" style="margin:0">
+    <div data-reveal><dt>Established</dt><dd>{{ cp.since }}</dd></div>
+    <div data-reveal style="--d:.06s"><dt>Address</dt><dd>{{ cp.address|join(', ') }}</dd></div>
+    <div data-reveal style="--d:.12s"><dt>Telephone</dt><dd><a href="tel:{{ cp.phone|replace(' ', '') }}">{{ cp.phone }}</a></dd></div>
+    <div data-reveal style="--d:.18s"><dt>Email</dt><dd><a href="mailto:{{ cp.email }}">{{ cp.email }}</a></dd></div>
+  </dl>
+</div></section>
+<section class="sec" style="padding-top:clamp(30px,4vw,60px)"><div class="wrap layout">
+  {{ m.toc(cp.sections) }}
+  <div>{{ m.sections(cp.sections, stages) }}</div>
+</div></section>
+<section class="sec-sm bg-paper"><div class="wrap">
+  <div class="pn" style="border:0;padding:0">
+    <a href="{{ url_for('site.campus', slug=prev.slug) if prev else url_for('site.campuses') }}"><span class="caps muted">← {{ 'Previous campus' if prev else 'All campuses' }}</span><span>{{ prev.name if prev else 'Campuses' }}</span></a>
+    <a href="{{ url_for('site.campus', slug=nxt.slug) if nxt else url_for('site.campuses') }}"><span class="caps muted">{{ 'Next campus' if nxt else 'All campuses' }} →</span><span>{{ nxt.name if nxt else 'Campuses' }}</span></a>
+  </div>
+</div></section>
+{{ m.cta(title='Visit ' ~ cp.name, body='Call or write to the campus office to arrange a visit. Addresses and maps for every campus are on the contact page.', image=cp.card) }}
+<div style="height:clamp(60px,8vw,110px)"></div>
+{% endblock %}

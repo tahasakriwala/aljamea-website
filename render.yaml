@@ -1,0 +1,19 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: aljamea-tus-saifiyah
+    runtime: python
+    rootDir: aljamea
+    plan: free                 # use "starter" to avoid the free plan's sleep after 15 idle minutes
+    region: singapore          # closest Render region to India / Pakistan / Kenya
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --preload --workers 2 --threads 4 --timeout 60 --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: ALJAMEA_SECRET
+        generateValue: true
+      - key: BEHIND_PROXY
+        value: "1"

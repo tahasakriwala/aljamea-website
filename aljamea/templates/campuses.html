@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = 'ajsm-06sahatshot7-5032' %}
+{% block title %}Campuses · {{ inst.name }}{% endblock %}
+{% block desc %}Aljamea-tus-Saifiyah’s four campuses in Surat, Karachi, Nairobi and Mumbai, each centred on its masjid and inspired by Fatimi architecture.{% endblock %}
+{% block main %}
+{{ m.page_hero('Four campuses, one academy', 'المدارس', 'Campuses', 'Surat, Karachi, Nairobi and Mumbai. Every building on every campus is oriented towards the Holy Kaaba, and every campus centres on its masjid.', 'ajsn-05baabnasr01-bl-1738-2') }}
+<section class="sec" style="padding-top:0"><div class="wrap">
+  {% for c in campuses %}
+  <a href="{{ url_for('site.campus', slug=c.slug) }}" class="duo {{ 'flip' if loop.index is even }}" style="margin-top:{{ 0 if loop.first else 'clamp(64px,8vw,120px)' }}">
+    <figure class="duo-media" style="margin:0" data-reveal="curtain"><div class="ph" style="aspect-ratio:5/4">{{ m.pic(c.card, c.name ~ ' campus') }}</div><span class="tag">{{ c.country }}</span></figure>
+    <div data-reveal style="--d:.12s">
+      <span class="ar" style="font-size:44px;color:var(--accent-text)">{{ c.ar }}</span>
+      <h2 class="h1" style="margin:4px 0 16px">{{ c.name }}</h2>
+      <p class="caps muted">{{ c.since }}</p>
+      <p class="lead" style="margin:18px 0 26px">{{ c.lead|hon }}</p>
+      <span class="link">Explore {{ c.name }} <svg><use href="#arrow"/></svg></span>
+    </div>
+  </a>
+  {% endfor %}
+</div></section>
+<section class="sec bg-night"><div class="wrap duo">
+  <div data-reveal><span class="kick">Green by design</span><h2 class="h1" style="margin:18px 0 22px">Built lightly on <em>creation.</em></h2>
+    <p class="lead">Solar heating in Surat since the 1980s. A Quranic garden in Karachi. In Nairobi and Mumbai: LEED requirements, rainwater harvesting, passive ventilation, geothermal cooling and photovoltaics.</p>
+    <a class="btn" style="margin-top:22px" href="{{ url_for('site.page', slug='architecture') }}">Fatimi architecture <svg><use href="#arrow"/></svg></a></div>
+  <div data-reveal style="--d:.15s">{{ m.journey_svg(jmap) }}</div>
+</div></section>
+{{ m.cta() }}
+{% endblock %}

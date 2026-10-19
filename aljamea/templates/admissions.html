@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = 'ajsm-12girlsclassroomshot1-4311' %}
+{% block title %}Admissions · {{ inst.name }}{% endblock %}
+{% block desc %}Programmes, pathways and how to apply to Aljamea-tus-Saifiyah, Darse Burhani and Mahad al-Zahra.{% endblock %}
+{% block main %}
+{{ m.page_hero('Admissions', 'القبول', 'Begin the journey', 'Aljamea offers pathways that nurture spiritual growth, personal development and a deeper understanding of the Dawoodi Bohra faith, each designed for different aspirations and rooted in the Fatimi heritage.', 'ajsm-12girlsclassroomshot1-4311') }}
+<section class="sec" style="padding-top:0"><div class="wrap">
+  <div class="cards">
+    {% for p in programmes %}
+    <div class="card" data-reveal style="--d:{{ loop.index0 * 0.08 }}s">
+      <span class="ar">{{ p.ar }}</span><h2 class="h3">{{ p.name }}</h2>
+      <div class="list-pills"><span>{{ p.length }}</span></div>
+      <p>{{ p.body }}</p><p class="small muted"><b>For:</b> {{ p.who }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div></section>
+<section class="sec bg-paper"><div class="wrap">
+  <div class="head"><div><span class="kick">How to apply</span><h2 class="h1" style="margin-top:18px" data-split>Four steps to <em>apply.</em></h2></div>
+    <a class="btn btn-copper" href="{{ inst.admissions_portal }}" rel="noopener">Open the admissions portal <svg><use href="#arrow"/></svg></a></div>
+  <div class="facts">{% for t, b in steps %}<div class="fact" data-reveal style="--d:{{ loop.index0 * 0.08 }}s"><span class="ix">{{ '%02d'|format(loop.index) }}</span><h3>{{ t }}</h3><p>{{ b }}</p></div>{% endfor %}</div>
+</div></section>
+<section class="sec"><div class="wrap">{{ m.ladder(stages) }}</div></section>
+<section class="sec-sm bg-night pattern"><div class="wrap duo">
+  <div data-reveal><span class="kick">Questions?</span><h2 class="h2" style="margin:18px 0 18px">Speak to a campus office</h2><p class="muted">For eligibility, dates and documents, contact the campus nearest you or the Head Office in Mumbai.</p></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end" data-reveal><a class="btn" href="{{ url_for('site.contact') }}">Contact & visit <svg><use href="#arrow"/></svg></a></div>
+</div></section>
+<div style="height:clamp(40px,6vw,80px)"></div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% import 'partials/macros.html' as m %}
+{% set og_img = p.img %}
+{% block title %}{{ p.title|striptags }} · {{ inst.name }}{% endblock %}
+{% block desc %}{{ p.lead|truncate(155) }}{% endblock %}
+{% block main %}
+{{ m.page_hero(p.title, p.ar, p.kicker, p.lead, p.img, crumbs or []) }}
+{% if p.img and has_img(p.img) and p.sections|length > 2 %}
+<div class="banner" style="height:70vh">{{ m.pic(p.img, p.title, '100vw') }}</div>
+{% endif %}
+<section class="sec">
+  <div class="wrap layout">
+    {{ m.toc(p.sections) }}
+    <div>{{ m.sections(p.sections, stages) }}</div>
+  </div>
+</section>
+{% if siblings %}
+<section class="sec-sm bg-paper">
+  <div class="wrap">
+    <span class="kick">{{ {'faculty': 'Other faculties', 'department': 'Departments', 'facility': 'Campus life'}[sib_kind] }}</span>
+    <div class="sibs" style="margin-top:22px">
+      {% for s in siblings %}<a class="chip {{ 'on' if s is sameas cur }}" href="{{ url_for('site.' ~ sib_kind, slug=s.slug) }}">{{ s.name }}</a>{% endfor %}
+    </div>
+    {% if prev or nxt %}
+    <div class="pn" style="margin-top:40px">
+      {% if prev %}<a href="{{ url_for('site.' ~ sib_kind, slug=prev.slug) }}"><span class="caps muted">← Previous</span><span>{{ prev.name }}</span></a>{% else %}<span></span>{% endif %}
+      {% if nxt %}<a href="{{ url_for('site.' ~ sib_kind, slug=nxt.slug) }}"><span class="caps muted">Next →</span><span>{{ nxt.name }}</span></a>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}
+{{ m.cta() }}
+{% endblock %}
